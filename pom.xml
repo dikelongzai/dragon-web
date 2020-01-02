@@ -38,6 +38,13 @@ under the License.
         <url>https://github.com/dikelongzai/dragon-web</url>
         <connection>https://github.com/dikelongzai/dragon-web.git</connection>
     </scm>
+    <repositories>
+        <repository>
+            <id>ebi</id>
+            <name>www.ebi.ac.uk</name>
+            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
     <modules>
         <module>common</module>
@@ -56,9 +63,13 @@ under the License.
         <junit.version>4.12</junit.version>
         <c3po.version>0.9.5.5</c3po.version>
         <lombok.version>1.16.10</lombok.version>
+        <bsh.version>2.0b4</bsh.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <cpdetector.version>1.0.7</cpdetector.version>
+
         <!--&lt;!&ndash; Overwrite default values from parent pom.-->
-             <!--Intellij is (sometimes?) using those values to choose target language level-->
-             <!--and thus is changing back to java 1.6 on each maven re-import &ndash;&gt;-->
+        <!--Intellij is (sometimes?) using those values to choose target language level-->
+        <!--and thus is changing back to java 1.6 on each maven re-import &ndash;&gt;-->
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
@@ -69,6 +80,20 @@ under the License.
         <dependency>
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cpdetector</groupId>
+            <artifactId>cpdetector</artifactId>
+
+        </dependency>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>bsh</groupId>
+            <artifactId>bsh</artifactId>
+
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -103,7 +128,6 @@ under the License.
         </dependency>
 
 
-
         <!-- tests will have log4j as the default logging framework available -->
 
         <dependency>
@@ -132,6 +156,22 @@ under the License.
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
                 <version>1.3.9</version>
+            </dependency>
+            <dependency>
+                <groupId>cpdetector</groupId>
+                <artifactId>cpdetector</artifactId>
+                <version>${cpdetector.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>${dom4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>bsh</groupId>
+                <artifactId>bsh</artifactId>
+                <version>${bsh.version}</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
@@ -193,7 +233,6 @@ under the License.
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
             </dependency>
-
 
 
             <!--We have to bump the commons-configuration to version 1.7 because Hadoop uses per
