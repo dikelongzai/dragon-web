@@ -1,9 +1,11 @@
 package com.dragon.web.core.config;
 
+import bsh.commands.dir;
 import com.dragon.web.common.security.Log;
 import com.dragon.web.common.util.FileUtil;
 import com.dragon.web.common.util.StringUtil;
 import com.dragon.web.core.Reloader;
+import com.dragon.web.core.ResourcePool;
 import com.dragon.web.core.SystemManager;
 import com.dragon.web.core.vo.Module;
 import org.dom4j.Element;
@@ -13,11 +15,13 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
  * BaseConfig
+ *
  * @author dikelongzai 15399073387@163.com
  * @date 2020-01-02 18:43
  */
@@ -29,9 +33,9 @@ public abstract class BaseConfig {
     protected Element configElement = null;
     protected static final String FILE_START = "file:/";
 
-    public abstract boolean checkFilename(String var1);
+    public abstract boolean checkFilename(String fileName);
 
-    protected abstract void loadFromFile(String var1);
+    protected abstract void loadFromFile(String fileName);
 
     public Element getConfigElement() {
         return configElement;
@@ -66,12 +70,43 @@ public abstract class BaseConfig {
     }
 
     /**
+     * 清除配置list
+     */
+    public void clearAdditionalFiles() {
+        this.additionalFiles.clear();
+    }
+
+    public void addAdditionalFiles(String fn) {
+        this.additionalFiles.add(fn);
+    }
+    /**
+     * 创建baseConfig 先用当前classload
+     * 有异常用FileUtil classload
+     * @param ele
+     * @return
+     */
+    public static BaseConfig createInstance(Element ele) {
+        BaseConfig baseConfig = null;
+        try {
+            baseConfig = (BaseConfig) Thread.currentThread().getContextClassLoader().loadClass(ele.attributeValue("class")).newInstance();
+        } catch (Exception e) {
+            try {
+                baseConfig = (BaseConfig) FileUtil.getResourceClass().getClassLoader().loadClass(ele.attributeValue("class")).newInstance();
+            } catch (Exception exp) {
+                Log.debug(exp);
+            }
+        }
+
+        return baseConfig;
+    }
+
+    /**
      * 加载配置
      */
     public synchronized void load() {
         this.thisTime = this.lastLoadTimeMillis;
         if (SystemManager.isJARApp()) {
-
+            this.loadAdditionalConfig();
         }
     }
 
@@ -103,13 +138,14 @@ public abstract class BaseConfig {
             } finally {
                 file.close();
             }
-        } catch (Exception var10) {
-            Log.exception(var10);
+        } catch (Exception exception) {
+            Log.exception(exception);
         }
     }
 
     /**
      * 文件是否验证
+     *
      * @param fn
      * @return
      */
@@ -151,6 +187,26 @@ public abstract class BaseConfig {
     }
 
     /**
+     * 获取加载间隔
+     * @return
+     */
+    public int getRealodInterval() {
+        return StringUtil.parseInt(this.configElement.attributeValue("realodInterval"), 0);
+    }
+
+    /**
+     * 配置是否有效
+     * @return
+     */
+    public boolean isEnable() {
+        try {
+            return !StringUtil.isFalse(this.configElement.attributeValue("enable"));
+        } catch (Exception ex) {
+            return true;
+        }
+    }
+
+    /**
      * 获取文件夹最后修改时间 为了动态加载配置项
      *
      * @param dir
@@ -178,6 +234,30 @@ public abstract class BaseConfig {
     }
 
     /**
+     * 重新加载文件夹配置
+     * @param dir
+     */
+    private void reloadDir(File dir) {
+        if (dir != null && dir.exists()) {
+            if (dir.isDirectory()) {
+                File[] fs = dir.listFiles();
+                for(int i = 0; i < fs.length; ++i) {
+                    if (fs[i].isDirectory()) {
+                        this.reloadDir(fs[i]);
+                    } else if (this.checkFilename(fs[i].getName()) && this.lastLoadTimeMillis < fs[i].lastModified()) {
+                        this.thisTime = Math.max(this.thisTime, fs[i].lastModified());
+                        this.loadFromFile(fs[i].getAbsolutePath());
+                    }
+                }
+            } else if (this.checkFilename(dir.getName()) && this.lastLoadTimeMillis < dir.lastModified()) {
+                this.thisTime = Math.max(this.thisTime, dir.lastModified());
+                this.loadFromFile(dir.getAbsolutePath());
+            }
+
+        }
+    }
+
+    /**
      * 最后修改时间
      *
      * @return
@@ -199,5 +279,34 @@ public abstract class BaseConfig {
         }
 
         return res;
+    }
+
+    /**
+     * 初始化重新加载线程
+     */
+    public void startTimer() {
+        if (this.getRealodInterval() > 0 && !SystemManager.isJARApp()) {
+            try {
+                this.reloader = new Reloader(this);
+                ResourcePool.getScheduledThreadPoolExecutor().scheduleAtFixedRate(this.reloader, (long)this.getRealodInterval(), (long)this.getRealodInterval(), TimeUnit.SECONDS);
+            } catch (Exception exception) {
+                Log.exception(exception);
+            }
+        }
+
+    }
+
+    /**
+     * 取消定时任务
+     */
+    public void cancelTimer() {
+        if (this.reloader != null) {
+            try {
+                ResourcePool.getScheduledThreadPoolExecutor().remove(this.reloader);
+            } catch (Exception excep) {
+                Log.exception(excep);
+            }
+        }
+
     }
 }
