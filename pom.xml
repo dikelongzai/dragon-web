@@ -66,6 +66,7 @@ under the License.
         <bsh.version>2.0b4</bsh.version>
         <dom4j.version>1.6.1</dom4j.version>
         <cpdetector.version>1.0.7</cpdetector.version>
+        <javaee-api.version>8.0.1</javaee-api.version>
 
         <!--&lt;!&ndash; Overwrite default values from parent pom.-->
         <!--Intellij is (sometimes?) using those values to choose target language level-->
@@ -91,6 +92,14 @@ under the License.
             <artifactId>dom4j</artifactId>
         </dependency>
         <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>bsh</groupId>
             <artifactId>bsh</artifactId>
 
@@ -111,6 +120,7 @@ under the License.
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+
 
         <!-- 'javax.annotation' classes like '@Nullable' -->
         <dependency>
@@ -158,6 +168,12 @@ under the License.
                 <version>1.3.9</version>
             </dependency>
             <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>${javaee-api.version}</version>
+
+            </dependency>
+            <dependency>
                 <groupId>cpdetector</groupId>
                 <artifactId>cpdetector</artifactId>
                 <version>${cpdetector.version}</version>
@@ -167,6 +183,11 @@ under the License.
                 <groupId>dom4j</groupId>
                 <artifactId>dom4j</artifactId>
                 <version>${dom4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jaxen</groupId>
+                <artifactId>jaxen</artifactId>
+                <version>1.2.0</version>
             </dependency>
             <dependency>
                 <groupId>bsh</groupId>

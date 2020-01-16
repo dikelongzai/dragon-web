@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+
+<!--
+说明：
+1，固定sql语句：XXX.insert、XXX.delete、XXX.update、XXX.updateAll、XXX.query由系统启动时候根据相应的数据字典生成，也可以在sql.xml中定义；
+2，参数格式：
+{aaa} 表示字符串参数aaa；
+{n:aaa} 表示数值参数aaa；
+{dt:aaa} 表示时间日期参数aaa；
+{dt:'2012-12-21'} 表示固定日期：2012-12-21；
+{dt[3]:aaa} 表示时间日期参数aaa的日期+3天；
+{dt[2]:'2012-12-21'} 表示固定日期：2012-12-23；
+{p:aaa} 表示没有''引起来的字符串参数aaa；
+{dac:TAB1 a,TAB2 b} 表示控制TAB1和TAB2两个表的数据权限(在SQL中，TAB1的别名为a，TAB2的别名为b)
+
+模糊匹配，前部分匹配，后部分匹配
+3，固定的参数命名：
+sysdatetime 	精确到秒的时间日期
+sysdate			精确到天的时间日期
+login.Userid			当前登录用户的user_id
+login.LoginId			当前登录用户的login_id
+login.UserName			当前登录用户的user_name
+login.EmployeeId		当前登录用户的员工id
+login.EmployeeCid		当前登录用户的员工cid
+login.EmployeeCode		当前登录用户的员工编码
+login.EmployeeName		当前登录用户的员工名称
+login.DepartmentId		当前登录用户的部门id
+login.DepartmentCid		当前登录用户的部门cid
+login.DepartmentCode	当前登录用户的部门编码
+login.DepartmentName	当前登录用户的部门名称
+login.CompanyId			当前登录用户的公司id
+login.CompanyCid		当前登录用户的公司cid
+login.CompanyCode		当前登录用户的公司编码
+login.CompanyName		当前登录用户的公司名称
+login.XXX               当前登录用户的变量（能用User类的getExtendValue方法取得的值）
+sys.XXX					系统参数XXX
+
+
+	<sql id="CORE_RESOURCE.insert">
+		insert into CORE_RESOURCE(
+		RES_ID
+		, CUSTOM01, CUSTOM02, CUSTOM03, CUSTOM04, CUSTOM05, CUSTOM06, CUSTOM07,
+		CUSTOM08, CUSTOM09, CUSTOM10, IS_LAST, STATE, CREATED_BY,
+		CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, START_DATE,
+		END_DATE, RES_CODE, TITLE, URL, TARGET, PARENTID, SORTID, UNVISIBLE,
+		RESTYPE, ACTIONS, PROJECTID
+		) values(
+		{n:RES_ID}
+		, {CUSTOM01}
+		, {CUSTOM02}
+		, {CUSTOM03}
+		, {CUSTOM04}
+		, {CUSTOM05}
+		, {CUSTOM06}
+		, {CUSTOM07}
+		, {CUSTOM08}
+		, {CUSTOM09}
+		, {CUSTOM10}
+		, {n:IS_LAST}
+		, {n:STATE}
+		, {n:CREATED_BY}
+		, {dt:CREATION_DATE}
+		, {n:LAST_UPDATED_BY}
+		, {dt:LAST_UPDATE_DATE}
+		, {dt:START_DATE}
+		, {dt:END_DATE}
+		, {RES_CODE}
+		, {TITLE}
+		, {URL}
+		, {TARGET}
+		, {PARENTID}
+		, {n:SORTID}
+		, {n:UNVISIBLE}
+		, {RESTYPE}
+		, {ACTIONS}
+		, {PROJECTID}
+		)
+	</sql>
+
+	<sql id="CORE_RESOURCE.delete">
+		delete from CORE_RESOURCE where
+		RES_ID= {n:RES_ID}
+	</sql>
+	
+	<sql id="CORE_REFER.deleteChild.CORE_REFER_DETAIL">
+		  delete from CORE_REFER_DETAIL where
+		   PK_REFER_ID=  {n:PK_REFER_ID}
+	</sql>
+
+	<sql id="CORE_RESOURCE.update">
+		<statement type="dynamic">
+			<condition>
+				<sql>update CORE_RESOURCE</sql>
+			</condition>
+			<condition union="set">
+				<sql></sql>
+			</condition>
+			<condition>
+				<rule>!{RES_ID}.equals("")</rule>
+				<sql>RES_ID = {n:RES_ID}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM01}.equals("")</rule>
+				<sql>CUSTOM01 = {CUSTOM01}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM02}.equals("")</rule>
+				<sql>CUSTOM02 = {CUSTOM02}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM03}.equals("")</rule>
+				<sql>CUSTOM03 = {CUSTOM03}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM04}.equals("")</rule>
+				<sql>CUSTOM04 = {CUSTOM04}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM05}.equals("")</rule>
+				<sql>CUSTOM05 = {CUSTOM05}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM06}.equals("")</rule>
+				<sql>CUSTOM06 = {CUSTOM06}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM07}.equals("")</rule>
+				<sql>CUSTOM07 = {CUSTOM07}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM08}.equals("")</rule>
+				<sql>CUSTOM08 = {CUSTOM08}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM09}.equals("")</rule>
+				<sql>CUSTOM09 = {CUSTOM09}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CUSTOM10}.equals("")</rule>
+				<sql>CUSTOM10 = {CUSTOM10}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{IS_LAST}.equals("")</rule>
+				<sql>IS_LAST = {n:IS_LAST}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{STATE}.equals("")</rule>
+				<sql>STATE = {n:STATE}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CREATED_BY}.equals("")</rule>
+				<sql>CREATED_BY = {n:CREATED_BY}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{CREATION_DATE}.equals("")</rule>
+				<sql><![CDATA[ CREATION_DATE >= {dt:CREATION_DATE} ]]></sql>
+			</condition>
+			<condition union=",">
+				<rule>!{LAST_UPDATED_BY}.equals("")</rule>
+				<sql>LAST_UPDATED_BY = {n:LAST_UPDATED_BY}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{LAST_UPDATE_DATE}.equals("")</rule>
+				<sql>LAST_UPDATE_DATE = {dt:LAST_UPDATE_DATE}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{START_DATE}.equals("")</rule>
+				<sql>START_DATE = {dt:START_DATE}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{END_DATE}.equals("")</rule>
+				<sql>END_DATE = {dt:END_DATE}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{RES_CODE}.equals("")</rule>
+				<sql>RES_CODE = {RES_CODE}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{TITLE}.equals("")</rule>
+				<sql>TITLE = {TITLE}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{URL}.equals("")</rule>
+				<sql>URL = {URL}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{TARGET}.equals("")</rule>
+				<sql>TARGET = {TARGET}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{PARENTID}.equals("")</rule>
+				<sql>PARENTID = {PARENTID}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{SORTID}.equals("")</rule>
+				<sql>SORTID = {n:SORTID}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{UNVISIBLE}.equals("")</rule>
+				<sql>UNVISIBLE = {n:UNVISIBLE}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{RESTYPE}.equals("")</rule>
+				<sql>RESTYPE = {RESTYPE}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{ACTIONS}.equals("")</rule>
+				<sql>ACTIONS = {ACTIONS}</sql>
+			</condition>
+			<condition union=",">
+				<rule>!{PROJECTID}.equals("")</rule>
+				<sql>PROJECTID = {PROJECTID}</sql>
+			</condition>
+			<condition union="where">
+				<sql> RES_ID={n:RES_ID}</sql>
+			</condition>
+		</statement>
+	</sql>
+
+	<sql id="CORE_RESOURCE.updateAll">
+		update CORE_RESOURCE set
+		CUSTOM01 = {CUSTOM01},
+		CUSTOM02 = {CUSTOM02},
+		CUSTOM03 = {CUSTOM03},
+		CUSTOM04 = {CUSTOM04},
+		CUSTOM05 = {CUSTOM05},
+		CUSTOM06 = {CUSTOM06},
+		CUSTOM07 = {CUSTOM07},
+		CUSTOM08 = {CUSTOM08},
+		CUSTOM09 = {CUSTOM09},
+		CUSTOM10 = {CUSTOM10},
+		IS_LAST = {n:IS_LAST},
+		STATE = {n:STATE},
+		CREATED_BY = {n:CREATED_BY},
+		CREATION_DATE = {dt:CREATION_DATE},
+		LAST_UPDATED_BY = {n:LAST_UPDATED_BY},
+		LAST_UPDATE_DATE = {dt:LAST_UPDATE_DATE},
+		START_DATE = {dt:START_DATE},
+		END_DATE = {dt:END_DATE},
+		RES_CODE = {RES_CODE},
+		TITLE = {TITLE},
+		URL = {URL},
+		TARGET = {TARGET},
+		PARENTID = {PARENTID},
+		SORTID = {n:SORTID},
+		UNVISIBLE = {n:UNVISIBLE},
+		RESTYPE = {RESTYPE},
+		ACTIONS = {ACTIONS},
+		PROJECTID = {PROJECTID}
+		where RES_ID={n:RES_ID}
+    </sql>
+
+	<sql id="CORE_RESOURCE.query">
+		<statement type="dynamic">
+			<condition>
+				<sql>select *</sql>
+			</condition>
+			<condition>
+				<sql>from CORE_RESOURCE where 1=1</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{whereSql}.equals("")</rule>
+				<sql>{p:whereSql}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{RES_ID}.equals("")</rule>
+				<sql>RES_ID = {n:RES_ID}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM01}.equals("")</rule>
+				<sql>CUSTOM01 like '%{p:CUSTOM01}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM02}.equals("")</rule>
+				<sql>CUSTOM02 like '%{p:CUSTOM02}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM03}.equals("")</rule>
+				<sql>CUSTOM03 like '%{p:CUSTOM03}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM04}.equals("")</rule>
+				<sql>CUSTOM04 like '%{p:CUSTOM04}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM05}.equals("")</rule>
+				<sql>CUSTOM05 like '%{p:CUSTOM05}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM06}.equals("")</rule>
+				<sql>CUSTOM06 like '%{p:CUSTOM06}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM07}.equals("")</rule>
+				<sql>CUSTOM07 like '%{p:CUSTOM07}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM08}.equals("")</rule>
+				<sql>CUSTOM08 like '%{p:CUSTOM08}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM09}.equals("")</rule>
+				<sql>CUSTOM09 like '%{p:CUSTOM09}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CUSTOM10}.equals("")</rule>
+				<sql>CUSTOM10 like '%{p:CUSTOM10}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{IS_LAST}.equals("")</rule>
+				<sql>IS_LAST = {n:IS_LAST}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{STATE}.equals("")</rule>
+				<sql>STATE = {n:STATE}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CREATED_BY}.equals("")</rule>
+				<sql>CREATED_BY = {n:CREATED_BY}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{CREATION_DATE}.equals("")</rule>
+				<sql>CREATION_DATE = {dt:CREATION_DATE}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{LAST_UPDATED_BY}.equals("")</rule>
+				<sql>LAST_UPDATED_BY = {n:LAST_UPDATED_BY}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{LAST_UPDATE_DATE}.equals("")</rule>
+				<sql>LAST_UPDATE_DATE = {dt:LAST_UPDATE_DATE}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{START_DATE}.equals("")</rule>
+				<sql>START_DATE = {dt:START_DATE}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{END_DATE}.equals("")</rule>
+				<sql>END_DATE = {dt:END_DATE}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{RES_CODE}.equals("")</rule>
+				<sql>RES_CODE like '%{p:RES_CODE}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{TITLE}.equals("")</rule>
+				<sql>TITLE like '%{p:TITLE}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{URL}.equals("")</rule>
+				<sql>URL like '%{p:URL}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{TARGET}.equals("")</rule>
+				<sql>TARGET like '%{p:TARGET}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{PARENTID}.equals("")</rule>
+				<sql>PARENTID like '%{p:PARENTID}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{SORTID}.equals("")</rule>
+				<sql>SORTID = {n:SORTID}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{UNVISIBLE}.equals("")</rule>
+				<sql>UNVISIBLE = {n:UNVISIBLE}</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{RESTYPE}.equals("")</rule>
+				<sql>RESTYPE like '%{p:RESTYPE}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{ACTIONS}.equals("")</rule>
+				<sql>ACTIONS like '%{p:ACTIONS}%'</sql>
+			</condition>
+			<condition union="and">
+				<rule>!{PROJECTID}.equals("")</rule>
+				<sql>PROJECTID like '%{p:PROJECTID}%'</sql>
+			</condition>
+		</statement>
+	</sql>
+
+
+-->
+
+</sqls>

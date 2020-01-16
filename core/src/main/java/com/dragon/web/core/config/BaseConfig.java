@@ -26,6 +26,8 @@ import java.util.jar.JarFile;
  * @date 2020-01-02 18:43
  */
 public abstract class BaseConfig {
+    public static final String PROPERTY_EXPRESSION = "property";
+    public static final String NAME_EXPRESSION ="name";
     protected long lastLoadTimeMillis = 0L;
     private long thisTime = 0L;
     private List<String> additionalFiles = new ArrayList();

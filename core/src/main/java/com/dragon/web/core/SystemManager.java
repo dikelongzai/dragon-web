@@ -16,6 +16,10 @@ public class SystemManager {
     protected static List<Module> modules = new ArrayList();
     private static String configPath = "/";
 
+    public static void setConfigPath(String configPath) {
+        SystemManager.configPath = configPath;
+    }
+
     public static List<Module> getModules() {
         return modules;
     }
