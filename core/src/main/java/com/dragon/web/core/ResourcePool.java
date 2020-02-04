@@ -2,6 +2,7 @@ package com.dragon.web.core;
 
 import bsh.Interpreter;
 import com.dragon.web.common.vo.ThreadObject;
+import com.dragon.web.common.vo.User;
 import com.dragon.web.db.util.DBConnection;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class ResourcePool {
     private static ThreadLocal<Interpreter> beanShell = new ThreadLocal();
     private static ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
     private static ThreadLocal<ThreadObject> currentThreadObject = new ThreadLocal();
-
+    private static ThreadLocal<User> currentUser = new ThreadLocal();
     public static ThreadObject getCurrentThreadObject() {
         ThreadObject u = (ThreadObject) currentThreadObject.get();
         if (u == null) {
@@ -108,5 +109,13 @@ public class ResourcePool {
         openedDBConnection.remove();
         currentDBConnection.remove();
         beanShell.remove();
+    }
+
+    public static ThreadLocal<User> getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(ThreadLocal<User> currentUser) {
+        ResourcePool.currentUser = currentUser;
     }
 }

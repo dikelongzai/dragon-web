@@ -67,7 +67,7 @@ under the License.
         <dom4j.version>1.6.1</dom4j.version>
         <cpdetector.version>1.0.7</cpdetector.version>
         <javaee-api.version>8.0.1</javaee-api.version>
-
+        <fastjson.version>1.2.62</fastjson.version>
         <!--&lt;!&ndash; Overwrite default values from parent pom.-->
         <!--Intellij is (sometimes?) using those values to choose target language level-->
         <!--and thus is changing back to java 1.6 on each maven re-import &ndash;&gt;-->
@@ -77,6 +77,8 @@ under the License.
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+
         <!-- Root dependencies for all projects -->
         <dependency>
             <groupId>com.mchange</groupId>
@@ -153,6 +155,11 @@ under the License.
             <type>jar</type>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+
+        </dependency>
 
     </dependencies>
 
@@ -172,6 +179,11 @@ under the License.
                 <artifactId>javaee-api</artifactId>
                 <version>${javaee-api.version}</version>
 
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
             <dependency>
                 <groupId>cpdetector</groupId>
