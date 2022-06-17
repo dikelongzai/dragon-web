@@ -67,7 +67,7 @@ under the License.
         <dom4j.version>1.6.1</dom4j.version>
         <cpdetector.version>1.0.7</cpdetector.version>
         <javaee-api.version>8.0.1</javaee-api.version>
-        <fastjson.version>1.2.62</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <!--&lt;!&ndash; Overwrite default values from parent pom.-->
         <!--Intellij is (sometimes?) using those values to choose target language level-->
         <!--and thus is changing back to java 1.6 on each maven re-import &ndash;&gt;-->
